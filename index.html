@@ -356,6 +356,103 @@
   .cascade-add { width: 100%; background: #7f77dd18; border: 1px dashed #7f77dd50; border-radius: 7px; color: #AFA9EC; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; padding: 7px; cursor: pointer; transition: background 0.15s; }
   .cascade-add:hover { background: #7f77dd28; }
 
+  /* Tipo de red selector */
+  .cascade-type-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+
+  .cascade-type-btn {
+    background: #1a1830;
+    border: 1px solid #2a2550;
+    border-radius: 6px;
+    padding: 7px 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+    text-align: center;
+    transition: all 0.18s;
+  }
+
+  .cascade-type-btn:hover { border-color: #7f77dd60; color: #AFA9EC; }
+  .cascade-type-btn.active { background: #7f77dd18; border-color: #7f77dd; color: #CECBF6; }
+  .cascade-type-btn.active.unbal { background: #ff9f4312; border-color: #ff9f4360; color: #ff9f43; }
+
+  /* Item desbalanceado */
+  .cascade-item-unbal {
+    background: #1c1510;
+    border: 1px solid #ff9f4330;
+    border-radius: 8px;
+    padding: 9px 10px;
+    margin-bottom: 0;
+  }
+
+  .unbal-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+
+  .unbal-header select {
+    flex: 1;
+    background: #0f0d1c;
+    border: 1px solid #2a2550;
+    border-radius: 5px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 5px 8px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .unbal-header select:focus { border-color: #ff9f43; }
+
+  .unbal-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+
+  .unbal-branch {
+    background: #12100e;
+    border: 1px solid #2a2010;
+    border-radius: 6px;
+    padding: 7px 9px;
+  }
+
+  .unbal-branch.selected { border-color: #ff9f4360; background: #1c1408; }
+
+  .unbal-branch-label {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .unbal-branch-loss {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ff9f43;
+  }
+
+  .unbal-branch-pct {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+
+  .branch-select-btn {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    background: none;
+    border: 1px solid #2a2550;
+    border-radius: 3px;
+    color: var(--text3);
+    cursor: pointer;
+    padding: 1px 5px;
+    transition: all 0.15s;
+  }
+
+  .branch-select-btn:hover, .branch-select-btn.active { background: #ff9f4320; border-color: #ff9f4360; color: #ff9f43; }
+
   .cascade-diagram-full {
     background: #080613;
     border: 1px solid #2a2550;
@@ -397,6 +494,7 @@
   .cdg-badge.l1  { background: #ff9f4315; border: 1px solid #ff9f4340; color: #ff9f43; }
   .cdg-badge.l2  { background: #a29bfe15; border: 1px solid #a29bfe40; color: #a29bfe; }
   .cdg-badge.edfa { background: #f9ca2415; border: 1px solid #f9ca2440; color: #f9ca24; }
+  .cdg-badge.nap  { background: #ff9f4315; border: 1px solid #ff9f4340; color: #ff9f43; }
 
   .cdg-scroll {
     overflow-x: auto;
@@ -602,7 +700,7 @@
   .breakdown-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s; }
 
   .divider { height: 1px; background: var(--border); margin: 14px 0; }
-  .chart-wrap { position: relative; height: 230px; }
+  .chart-wrap { position: relative; height: 320px; }
 
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--surface); }
@@ -622,7 +720,7 @@
     </div>
     <div class="header-text">
       <h1>Zampa FTTH Tools</h1>
-      <p>Calculadora de pérdida óptica · Dual landa 1490 nm / 1550 nm</p>
+      <p>Calculadora de pérdida óptica · Dual Lambda 1490 nm / 1550 nm</p>
     </div>
     <div class="version-badge">v3.0 · GPON / WDM</div>
   </div>
@@ -643,7 +741,7 @@
               <div class="landa-badge">
                 <div class="landa-dot"></div>
                 <span class="landa-nm">1490 nm</span>
-                <span class="landa-role">DS/VOZ</span>
+                <span class="landa-role">DW</span>
               </div>
               <div class="input-unit" style="border-color:#ff9f4340;">
                 <input type="number" id="pin1490" value="3" step="0.1" min="-30" max="30" oninput="recalc()" style="border:none;background:transparent;">
@@ -654,7 +752,7 @@
               <div class="landa-badge">
                 <div class="landa-dot"></div>
                 <span class="landa-nm">1550 nm</span>
-                <span class="landa-role">US/TV</span>
+                <span class="landa-role">RF OVERLAY</span>
               </div>
               <div class="input-unit" style="border-color:#a29bfe40;">
                 <input type="number" id="pin1550" value="5" step="0.1" min="-30" max="30" oninput="recalc()" style="border:none;background:transparent;">
@@ -673,7 +771,7 @@
                 <div class="landa-badge">
                   <div class="landa-dot"></div>
                   <span class="landa-nm">1490 nm</span>
-                  <span class="landa-role">DIGITAL</span>
+                  <span class="landa-role">DW</span>
                 </div>
                 <div class="input-unit" style="border-color:#ff9f4340;">
                   <input type="number" id="rxSens1490" value="-27" step="0.1" min="-45" max="0" oninput="recalc()" style="border:none;background:transparent;">
@@ -696,16 +794,18 @@
         </div>
       </div>
 
-      <!-- Splitter -->
+      <!-- Cascada directa sin selector de splitter individual -->
       <div class="panel">
         <div class="panel-header">
           <div class="panel-dot"></div>
-          <span class="panel-title">Divisor Óptico (Splitter)</span>
+          <span class="panel-title">Divisores en cascada</span>
         </div>
         <div class="panel-body">
-          <div class="splitter-grid" id="splitterGrid"></div>
-          <div class="cascade-panel" id="cascadePanel" style="display:none;">
-            <div class="cascade-title">&#9741; Divisores en cascada</div>
+          <div id="cascadePanel">
+            <div class="cascade-type-row">
+              <button class="cascade-type-btn active" id="typeBalBtn" onclick="setNetworkType('balanced')">&#9632; Balanceada</button>
+              <button class="cascade-type-btn unbal" id="typeUnbalBtn" onclick="setNetworkType('unbalanced')">&#9670; Desbalanceado</button>
+            </div>
             <div class="cascade-list" id="cascadeList"></div>
             <div class="cascade-total">
               <span class="cascade-total-label">PÉRDIDA COMBINADA</span>
@@ -760,7 +860,7 @@
             <div class="field-group">
               <label class="field-label">Atenuación</label>
               <div class="input-unit">
-                <input type="number" id="fiberAtten" value="0.35" min="0.1" max="1" step="0.01" oninput="recalc()">
+                <input type="number" id="fiberAtten" value="0.35" min="0.05" max="1" step="0.01" oninput="recalc()">
                 <span class="unit-tag">dB/km</span>
               </div>
             </div>
@@ -770,7 +870,7 @@
 
     </div>
 
-    <!-- RIGHT: Results -->
+    <!-- RIGHT: Resultados del Enlace -->
     <div class="panel">
       <div class="panel-header">
         <div class="panel-dot"></div>
@@ -778,14 +878,13 @@
       </div>
       <div class="panel-body">
 
-        <!-- DUAL LANDA RESULTS -->
         <div class="dual-results">
           <!-- 1490 nm -->
           <div class="landa-result-card l1">
             <div class="lr-header">
               <div class="landa-dot" style="width:9px;height:9px;background:var(--l1-color);box-shadow:0 0 7px var(--l1-glow);border-radius:50%;"></div>
               <span class="lr-nm">1490 nm</span>
-              <span class="lr-role">DS · BAJADA</span>
+              <span class="lr-role">DW</span>
             </div>
             <div class="lr-metrics">
               <div class="lr-metric">
@@ -812,7 +911,7 @@
             <div class="lr-header">
               <div class="landa-dot" style="width:9px;height:9px;background:var(--l2-color);box-shadow:0 0 7px var(--l2-glow);border-radius:50%;"></div>
               <span class="lr-nm">1550 nm</span>
-              <span class="lr-role">US · SUBIDA</span>
+              <span class="lr-role">RF OVERLAY</span>
             </div>
             <div class="lr-metrics">
               <div class="lr-metric">
@@ -857,30 +956,11 @@
           </div>
         </div>
 
-        <div class="divider"></div>
-
-        <!-- BREAKDOWN -->
-        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">
-          Desglose de pérdidas
-          <span style="margin-left:10px;color:var(--l1-color);">&#9632; 1490</span>
-          <span style="margin-left:8px;color:var(--l2-color);">&#9632; 1550</span>
-        </div>
-        <div class="breakdown" id="breakdown"></div>
-
-        <div class="divider"></div>
-
-        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">
-          Comparación por divisor
-        </div>
-        <div class="chart-wrap">
-          <canvas id="lossChart"></canvas>
-        </div>
-
       </div>
     </div>
   </div>
 
-  <!-- DIAGRAMA DE CASCADA — sección full-width protagonista -->
+  <!-- DIAGRAMA DE CASCADA — full width, siempre visible cuando SUMAR activo -->
   <div id="cascadeDiagramSection" style="display:none; margin-top:1.5rem;">
     <div class="cascade-diagram-full">
       <div class="cdg-header">
@@ -892,6 +972,7 @@
           <span class="cdg-badge l1">&#9632; 1490 nm</span>
           <span class="cdg-badge l2">&#9632; 1550 nm</span>
           <span class="cdg-badge edfa" id="cdgEdfaBadge" style="display:none;">&#9889; EDFA</span>
+          <span class="cdg-badge nap" id="cdgNapBadge" style="display:none;">&#9670; Desbalanceado</span>
         </div>
       </div>
       <div class="cdg-scroll">
@@ -901,41 +982,100 @@
     </div>
   </div>
 
+  <!-- DESGLOSE DE PÉRDIDAS — full width -->
+  <div class="panel" style="margin-top:1.25rem;">
+    <div class="panel-header">
+      <div class="panel-dot"></div>
+      <span class="panel-title">
+        Desglose de pérdidas
+        <span style="margin-left:12px;color:var(--l1-color);font-size:0.65rem;">&#9632; 1490 nm</span>
+        <span style="margin-left:8px;color:var(--l2-color);font-size:0.65rem;">&#9632; 1550 nm</span>
+      </span>
+    </div>
+    <div class="panel-body">
+      <div class="breakdown" id="breakdown"></div>
+    </div>
+  </div>
+
+  <!-- COMPARACIÓN POR DIVISOR — full width -->
+  <div class="panel" style="margin-top:1.25rem;">
+    <div class="panel-header">
+      <div class="panel-dot"></div>
+      <span class="panel-title">Comparación por divisor</span>
+    </div>
+    <div class="panel-body">
+      <div style="position:relative;height:280px;">
+        <canvas id="lossChart"></canvas>
+      </div>
+    </div>
+  </div>
+
 </div><!-- end app -->
 
 <script>
 const splitters = [
-  { name: '1:2',   loss: 3.5  },
-  { name: '1:4',   loss: 7.2  },
-  { name: '1:8',   loss: 10.5 },
-  { name: '1:16',  loss: 13.8 },
-  { name: '1:32',  loss: 17.2 },
-  { name: '1:64',  loss: 20.5 },
+  { name: '1:2',   loss: 3.7  },
+  { name: '1:4',   loss: 7.1  },
+  { name: '1:8',   loss: 10.7 },
+  { name: '1:16',  loss: 13.7 },
+  { name: '1:32',  loss: 16.9 },
+  { name: '1:64',  loss: 21.0 },
   { name: '1:128', loss: 23.9 },
   { name: 'SUMAR', loss: 0, special: true },
   { name: 'NONE',  loss: 0    },
 ];
 
 const spOptions = [
-  { name: '1:2',   loss: 3.5  },
-  { name: '1:4',   loss: 7.2  },
-  { name: '1:8',   loss: 10.5 },
-  { name: '1:16',  loss: 13.8 },
-  { name: '1:32',  loss: 17.2 },
-  { name: '1:64',  loss: 20.5 },
+  { name: '1:2',   loss: 3.7  },
+  { name: '1:4',   loss: 7.1  },
+  { name: '1:8',   loss: 10.7 },
+  { name: '1:16',  loss: 13.7 },
+  { name: '1:32',  loss: 16.9 },
+  { name: '1:64',  loss: 21.0 },
   { name: '1:128', loss: 23.9 },
   { name: 'NONE',  loss: 0    },
 ];
 
 // Atenuación típica por landa (dB/km) para fibra G.652
-const ATTEN = { l1490: 0.35, l1550: 0.20 };
+const ATTEN = { l1490: 0.35, l1550: 0.25 }; // dB/km según Excel: 1490nm=0.35, 1550nm=0.25
 
 let active = 2;
 let chart;
+let networkType = 'balanced';
 let cascadeItems = [{ loss: 10.5 }, { loss: 13.8 }];
 
+// Splitters desbalanceados — valores reales medidos (Excel Perdidas_y_atenuaciones)
+// loss1 = inserción (rama express → siguiente nodo)
+// loss2 = derivación (rama tap → NAP 8 puertos)
+const unbalOptions = [
+  { name: '50/50', loss1:  4.10, loss2: 13.90, pct1: 50, pct2: 50 },
+  { name: '60/40', loss1:  2.73, loss2: 15.32, pct1: 60, pct2: 40 },
+  { name: '70/30', loss1:  2.22, loss2: 16.51, pct1: 70, pct2: 30 },
+  { name: '80/20', loss1:  1.25, loss2: 18.25, pct1: 80, pct2: 20 },
+  { name: '85/15', loss1:  1.13, loss2: 20.79, pct1: 85, pct2: 15 },
+  { name: '90/10', loss1:  0.73, loss2: 21.54, pct1: 90, pct2: 10 },
+];
+let cascadeItemsUnbal = [{ optIdx: 3, branch: 'main' }, { optIdx: 2, branch: 'main' }];
+
+function setNetworkType(type) {
+  networkType = type;
+  document.getElementById('typeBalBtn').className  = 'cascade-type-btn'       + (type === 'balanced'   ? ' active' : '');
+  document.getElementById('typeUnbalBtn').className = 'cascade-type-btn unbal' + (type === 'unbalanced' ? ' active' : '');
+  const napBadge = document.getElementById('cdgNapBadge');
+  if (napBadge) napBadge.style.display = type === 'unbalanced' ? 'inline-block' : 'none';
+  renderCascade(); recalc();
+}
+
 function getCascadeLoss() {
-  return cascadeItems.reduce((s, it) => s + it.loss, 0);
+  if (networkType === 'balanced') {
+    return cascadeItems.reduce((s, it) => s + (it.loss || 0), 0);
+  } else {
+    return cascadeItemsUnbal.reduce((s, it) => {
+      const opt = unbalOptions[it.optIdx];
+      if (!opt) return s;
+      return s + (it.branch === 'main' ? opt.loss1 : opt.loss2);
+    }, 0);
+  }
 }
 
 function drawCascadeDiagram() {
@@ -950,14 +1090,16 @@ function drawCascadeDiagram() {
   const rxSens1490 = parseFloat(document.getElementById('rxSens1490')?.value) || -27;
   const rxSens1550 = parseFloat(document.getElementById('rxSens1550')?.value) || -7;
 
-  const items = cascadeItems;
+  // Soporte para red balanceada y desbalanceada
+  const isUnbal = networkType === 'unbalanced';
+  const items = isUnbal ? cascadeItemsUnbal : cascadeItems;
   const n = items.length;
 
   // Layout
   const symW = 44;
   const lineLen = 52;
-  const rowH = 130;  // altura extra para pump label EDFA
-  const cy = 56;     // centro más bajo para dar espacio arriba al pump
+  const rowH = isUnbal ? 170 : 130;  // más altura en desbalanceado para caja NAP arriba
+  const cy = isUnbal ? 90 : 56;      // centro más bajo en desbalanceado para dar espacio al NAP
   const svgW = (symW + lineLen) * (n + 2) + 20;
   const svgH = rowH;
 
@@ -1101,15 +1243,46 @@ function drawCascadeDiagram() {
     curX += symW;
 
     for (let i = 0; i < n; i++) {
-      const loss = items[i].loss; acc += loss;
-      const name = spOptions.find(o => o.loss === loss)?.name || '?';
+      let loss, name, lossLabel;
+      if (isUnbal) {
+        const opt = unbalOptions[items[i].optIdx];
+        const br  = items[i].branch;
+        loss = br === 'main' ? opt.loss1 : opt.loss2;
+        name = opt.name;
+        lossLabel = br === 'main'
+          ? `-${opt.loss1.toFixed(2)}dB ins.`
+          : `-${opt.loss2.toFixed(2)}dB der.`;
+      } else {
+        loss = items[i].loss;
+        name = spOptions.find(o => o.loss === loss)?.name || '?';
+        lossLabel = `-${loss.toFixed(1)} dB`;
+      }
+      acc += loss;
       const p1490 = pin1490 - acc, p1550 = pin1550 - acc;
-      html += fiberLine(curX, curX + lineLen, cy, '#7f77dd', `-${loss.toFixed(1)} dB`);
+      html += fiberLine(curX, curX + lineLen, cy, '#7f77dd', lossLabel);
       curX += lineLen;
       const scx = curX + symW/2 - 4;
-      html += splitterSymbol(scx, cy, name, '#7f77dd');
-      html += powerLabel(scx, cy, p1490, p1550);
-      html += `<text x="${scx}" y="${cy-28}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#AFA9EC">SP ${i+1}</text>`;
+
+      if (isUnbal) {
+        const opt = unbalOptions[items[i].optIdx];
+        const tapY = cy - 42;
+        html += splitterSymbol(scx, cy, opt.name, '#ff9f43');
+        // Rama TAP → sube hacia NAP 8
+        html += `<line x1="${scx}" y1="${cy - 14}" x2="${scx}" y2="${tapY + 8}" stroke="#ff9f43" stroke-width="1.5" opacity="0.85"/>`;
+        html += `<polygon points="${scx-3},${tapY+5} ${scx+3},${tapY+5} ${scx},${tapY}" fill="#ff9f43" opacity="0.85"/>`;
+        // Caja NAP 8
+        html += `<rect x="${scx - 18}" y="${tapY - 14}" width="36" height="14" rx="4" fill="#1c1508" stroke="#ff9f43" stroke-width="1.5" filter="url(#gv)"/>`;
+        html += `<text x="${scx}" y="${tapY - 4}" text-anchor="middle" font-family="Space Mono" font-size="5.5" fill="#ff9f43" font-weight="700">NAP 8</text>`;
+        // Pérdida tap
+        html += `<text x="${scx + 20}" y="${(cy + tapY)/2 + 2}" text-anchor="start" font-family="Space Mono" font-size="5" fill="#ff9f43" opacity="0.9">-${opt.loss2.toFixed(2)}dB</text>`;
+        // Distribución
+        html += `<text x="${scx}" y="${cy - 30}" text-anchor="middle" font-family="Space Mono" font-size="5.5" fill="#ff9f43">${opt.pct1}% nodo / ${opt.pct2}% NAP</text>`;
+        html += powerLabel(scx, cy, p1490, p1550);
+      } else {
+        html += splitterSymbol(scx, cy, name, '#7f77dd');
+        html += powerLabel(scx, cy, p1490, p1550);
+        html += `<text x="${scx}" y="${cy-28}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#AFA9EC">SP ${i+1}</text>`;
+      }
       curX += symW;
     }
 
@@ -1123,72 +1296,104 @@ function drawCascadeDiagram() {
     html += `<text x="${rxCx2}" y="${cy-28}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="${rxC}">ONT·RX</text>`;
 
   } else {
-    // ── CON EDFA ── arquitectura real:
+    // ── CON EDFA — arquitectura correcta:
     //
-    //  OLT·TX ──── WDM·DEMUX ─── 1490 bypass (arriba) ──────────── WDM·MUX ── splitters ── RX
-    //                     └────── EDFA (1550, abajo) ──────────────┘
+    //  ┌─────────────── HUB / CABECERA ───────────────┐
+    //  │  OLT·TX ──→ base EDFA ──→ punta: λ1490+λ1550 │──→ splitters ──→ RX
+    //  └──────────────────────────────────────────────┘
     //
-    const mainY  = cy;           // fila principal (línea de 1490 y combinada)
-    const edfaY  = cy + 55;      // fila EDFA (1550 amplificada)
-    const wdmInX = curX + symW + 50;   // X del WDM demux
-    const edfaMidX = wdmInX + 80;     // X del EDFA
-    const wdmOutX  = edfaMidX + 80;   // X del WDM mux
-    const bypassY  = mainY - 30;      // Y del cable bypass 1490
+    const mainY   = cy;
+    const edfaCx  = curX + symW + 70;   // centro del EDFA
+    const edfaOutX = edfaCx + 28;        // punta derecha del triángulo EDFA (salida)
+    const hubPad  = 18;
+    const hubX1   = curX - 8;
+    const hubX2   = edfaOutX + 30;
+    const hubY1   = mainY - 52;
+    const hubY2   = mainY + 52;
 
-    // OLT TX — solo muestra 1490nm, el 1550 sale del EDFA
+    // ── Recuadro HUB (línea punteada) ──
+    html += `<rect x="${hubX1}" y="${hubY1}" width="${hubX2 - hubX1}" height="${hubY2 - hubY1}"
+      rx="8" fill="#f9ca2406" stroke="#f9ca24" stroke-width="1.2"
+      stroke-dasharray="5,3" opacity="0.7"/>`;
+    // Label HUB centrado dentro del recuadro en la parte superior
+    html += `<text x="${(hubX1+hubX2)/2}" y="${hubY1 + 9}" text-anchor="middle"
+      font-family="Space Mono" font-size="6.5" fill="#f9ca24" font-weight="700" letter-spacing="3" opacity="0.9">HUB</text>`;
+
+    // ── OLT TX — solo muestra lambda, sin valor de potencia ──
     html += txSymbol(txCx, mainY, '#00e5a0');
-    html += `<text x="${txCx}" y="${mainY-28}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#00e5a0">OLT·TX</text>`;
-    html += `<text x="${txCx}" y="${mainY+22}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#ff9f43">${pin1490>=0?'+':''}${pin1490.toFixed(1)} dBm</text>`;
-    html += `<text x="${txCx}" y="${mainY+32}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#4a5878">1490 nm</text>`;
+    html += `<text x="${txCx}" y="${mainY - 30}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#00e5a0">OLT·TX</text>`;
+    html += `<text x="${txCx}" y="${mainY + 22}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#ff9f43">1490 nm</text>`;
+    html += `<text x="${txCx}" y="${mainY + 32}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#a29bfe">1550 nm</text>`;
 
-    // TX → WDM IN
-    html += fiberLine(curX + symW, wdmInX - 12, mainY, '#8a99bb', null);
-    html += wdmSymbol(wdmInX, mainY, 'WDM');
-    html += `<text x="${wdmInX}" y="${mainY-18}" text-anchor="middle" font-family="Space Mono" font-size="5" fill="#8a99bb">DEMUX</text>`;
+    // ── Fibra OLT → base EDFA ──
+    const oltOutX = curX + symW + 11;
+    const edfaBaseX = edfaCx - 12; // base (izquierda) del triángulo EDFA
+    html += fiberLine(oltOutX, edfaBaseX, mainY, '#00e5a0', null);
 
-    // ── 1490 bypass (por arriba) ──
-    html += `<line x1="${wdmInX}" y1="${mainY-12}" x2="${wdmInX}" y2="${bypassY}" stroke="#ff9f43" stroke-width="1.5" opacity="0.85"/>`;
-    html += `<line x1="${wdmInX}" y1="${bypassY}" x2="${wdmOutX}" y2="${bypassY}" stroke="#ff9f43" stroke-width="1.5" opacity="0.85"/>`;
-    for (let xi = wdmInX+10; xi < wdmOutX-8; xi+=10)
-      html += `<line x1="${xi}" y1="${bypassY-4}" x2="${xi+5}" y2="${bypassY+4}" stroke="#ff9f43" stroke-width="0.8" opacity="0.35"/>`;
-    html += `<text x="${(wdmInX+wdmOutX)/2}" y="${bypassY-7}" text-anchor="middle" font-family="Space Mono" font-size="5.5" fill="#ff9f43">1490 nm — bypass sin amplificar</text>`;
-    html += `<line x1="${wdmOutX}" y1="${bypassY}" x2="${wdmOutX}" y2="${mainY-12}" stroke="#ff9f43" stroke-width="1.5" opacity="0.85"/>`;
-    html += `<polygon points="${wdmOutX-3},${mainY-15} ${wdmOutX+3},${mainY-15} ${wdmOutX},${mainY-10}" fill="#ff9f43" opacity="0.85"/>`;
+    // ── Símbolo EDFA (triángulo grande, OLT entra por la base) ──
+    const eh = 30, ew = 28;
+    // Triángulo: base izquierda, punta derecha
+    const ePts = `${edfaCx - ew/2},${mainY - eh/2} ${edfaCx - ew/2},${mainY + eh/2} ${edfaCx + ew/2},${mainY}`;
+    html += `<polygon points="${ePts}" fill="#0d0a1f" stroke="#f9ca24" stroke-width="2" filter="url(#gv)"/>`;
+    // Círculo exterior
+    html += `<circle cx="${edfaCx}" cy="${mainY}" r="${eh/2 + 6}" fill="none" stroke="#f9ca24" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>`;
+    // Er³⁺ dentro
+    html += `<text x="${edfaCx - 4}" y="${mainY + 3}" text-anchor="middle" font-family="Space Mono" font-size="7" fill="#f9ca24" font-weight="700" opacity="0.9">Er</text>`;
+    html += `<text x="${edfaCx + 5}" y="${mainY - 2}" text-anchor="middle" font-family="Space Mono" font-size="5" fill="#f9ca24" opacity="0.8">3+</text>`;
+    // Pump 980 nm (flecha hacia arriba desde la cima)
+    html += `<line x1="${edfaCx}" y1="${mainY - eh/2 - 6}" x2="${edfaCx}" y2="${mainY - eh/2 - 18}" stroke="#f9ca24" stroke-width="1.5" opacity="0.8"/>`;
+    html += `<polygon points="${edfaCx-3},${mainY-eh/2-6} ${edfaCx+3},${mainY-eh/2-6} ${edfaCx},${mainY-eh/2-1}" fill="#f9ca24" opacity="0.8"/>`;
+    html += `<text x="${edfaCx + 6}" y="${mainY - eh/2 - 10}" font-family="Space Mono" font-size="5" fill="#f9ca24" opacity="0.9">pump 980nm</text>`;
+    // Label EDFA
+    html += `<text x="${edfaCx}" y="${mainY + eh/2 + 16}" text-anchor="middle" font-family="Space Mono" font-size="6.5" fill="#f9ca24" font-weight="700">EDFA</text>`;
 
-    // ── 1550 → EDFA (por abajo) ──
-    html += `<line x1="${wdmInX}" y1="${mainY+12}" x2="${wdmInX}" y2="${edfaY}" stroke="#a29bfe" stroke-width="1.5" opacity="0.8"/>`;
-    html += fiberLine(wdmInX, edfaMidX - symW/2, edfaY, '#f9ca24', null);
-    // EDFA
-    html += edfaSymbol(edfaMidX, edfaY, '#f9ca24');
-    html += `<text x="${edfaMidX}" y="${edfaY-30}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#f9ca24">EDFA</text>`;
-    html += `<rect x="${edfaMidX-22}" y="${edfaY-43}" width="44" height="11" rx="3" fill="#f9ca2415" stroke="#f9ca2450" stroke-width="0.8"/>`;
-    html += `<text x="${edfaMidX}" y="${edfaY-34}" text-anchor="middle" font-family="Space Mono" font-size="5" fill="#f9ca24">BOOST 1550nm</text>`;
-    html += `<text x="${edfaMidX}" y="${edfaY+20}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#f9ca24">▲ ${pin1550.toFixed(1)} dBm</text>`;
-    // EDFA → WDM OUT
-    html += fiberLine(edfaMidX + symW/2, wdmOutX, edfaY, '#f9ca24', null);
-    html += `<line x1="${wdmOutX}" y1="${edfaY}" x2="${wdmOutX}" y2="${mainY+12}" stroke="#f9ca24" stroke-width="1.5" opacity="0.85"/>`;
-    html += `<polygon points="${wdmOutX-3},${mainY+15} ${wdmOutX+3},${mainY+15} ${wdmOutX},${mainY+10}" fill="#f9ca24" opacity="0.85"/>`;
+    // ── Salida EDFA: ambas lambdas salen de la punta ──
+    const eOutX = edfaCx + ew/2;  // punta del triángulo
+    const sep   = 14;              // separación vertical entre las dos lambdas
 
-    // WDM OUT (MUX)
-    html += wdmSymbol(wdmOutX, mainY, 'WDM');
-    html += `<text x="${wdmOutX}" y="${mainY-18}" text-anchor="middle" font-family="Space Mono" font-size="5" fill="#8a99bb">MUX</text>`;
-    html += `<text x="${wdmOutX}" y="${mainY+22}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#ff9f43">${pin1490>=0?'+':''}${pin1490.toFixed(1)} dBm</text>`;
-    html += `<text x="${wdmOutX}" y="${mainY+32}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#f9ca24">▲ ${pin1550.toFixed(1)} dBm</text>`;
+    // Lambda 1490 — línea hacia arriba-derecha
+    html += `<line x1="${eOutX}" y1="${mainY}" x2="${eOutX + 28}" y2="${mainY - sep}" stroke="#ff9f43" stroke-width="1.8" opacity="0.9"/>`;
+    html += `<polygon points="${eOutX+24},${mainY-sep-3} ${eOutX+30},${mainY-sep} ${eOutX+24},${mainY-sep+3}" fill="#ff9f43" opacity="0.9"/>`;
 
-    curX = wdmOutX + 12;
+    // Lambda 1550 — línea hacia abajo-derecha
+    html += `<line x1="${eOutX}" y1="${mainY}" x2="${eOutX + 28}" y2="${mainY + sep}" stroke="#f9ca24" stroke-width="1.8" opacity="0.9"/>`;
+    html += `<polygon points="${eOutX+24},${mainY+sep-3} ${eOutX+30},${mainY+sep} ${eOutX+24},${mainY+sep+3}" fill="#f9ca24" opacity="0.9"/>`;
+
+    // Textos debajo del bloque, sin superposición — alineados a la izquierda del área de salida
+    const lblX = eOutX + 4;
+    html += `<text x="${lblX}" y="${mainY - sep - 8}" font-family="Space Mono" font-size="5.5" fill="#ff9f43" font-weight="700">λ1490  ${pin1490.toFixed(1)} dBm</text>`;
+    html += `<text x="${lblX}" y="${mainY + sep + 16}" font-family="Space Mono" font-size="5.5" fill="#f9ca24" font-weight="700">λ1550 ▲${pin1550.toFixed(1)} dBm</text>`;
+
+    // ── Fibra combinada fuera del HUB hacia splitters ──
+    const hubExitX = hubX2 + 2;
+    // Las dos lambdas convergen en el borde del hub
+    html += `<line x1="${eOutX + 28}" y1="${mainY - sep}" x2="${hubExitX}" y2="${mainY}" stroke="#ff9f43" stroke-width="1.4" opacity="0.7"/>`;
+    html += `<line x1="${eOutX + 28}" y1="${mainY + sep}" x2="${hubExitX}" y2="${mainY}" stroke="#f9ca24" stroke-width="1.4" opacity="0.7"/>`;
+    html += `<circle cx="${hubExitX}" cy="${mainY}" r="3.5" fill="#8a99bb" opacity="0.8"/>`;
+
+    curX = hubExitX;
 
     // Splitters después del MUX
     for (let i = 0; i < n; i++) {
-      const loss = items[i].loss; acc += loss;
-      const name = spOptions.find(o => o.loss === loss)?.name || '?';
+      let loss, name;
+      if (isUnbal) {
+        const opt = unbalOptions[items[i].optIdx];
+        const br  = items[i].branch;
+        loss = br === 'main' ? opt.loss1 : opt.loss2;
+        name = opt.name;
+      } else {
+        loss = items[i].loss;
+        name = spOptions.find(o => o.loss === loss)?.name || '?';
+      }
+      acc += loss;
       const p1490 = pin1490 - acc, p1550 = pin1550 - acc;
       html += fiberLine(curX, curX+lineLen, mainY, '#7f77dd', `-${loss.toFixed(1)} dB`);
       curX += lineLen;
       const scx = curX + symW/2 - 4;
-      html += splitterSymbol(scx, mainY, name, '#7f77dd');
+      html += splitterSymbol(scx, mainY, name, isUnbal ? '#ff9f43' : '#7f77dd');
       html += `<text x="${scx}" y="${mainY+22}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#ff9f43">${p1490>=0?'+':''}${p1490.toFixed(1)} dBm</text>`;
       html += `<text x="${scx}" y="${mainY+32}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#f9ca24">${p1550>=0?'+':''}${p1550.toFixed(1)} dBm</text>`;
-      html += `<text x="${scx}" y="${mainY-18}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#AFA9EC">SP ${i+1}</text>`;
+      html += `<text x="${scx}" y="${mainY-18}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="${isUnbal ? '#ff9f43' : '#AFA9EC'}">SP ${i+1}</text>`;
       curX += symW;
     }
 
@@ -1213,7 +1418,7 @@ function drawCascadeDiagram() {
     html += `<text x="118" y="${ly}" font-family="Space Mono" font-size="6" fill="#f9ca24">EDFA boost</text>`;
   }
 
-  const finalH = hasEDFA ? 200 : rowH;
+  const finalH = hasEDFA ? 175 : rowH;
   svg.innerHTML = html;
 
   // Escala mayor para protagonismo — mínimo 700px de ancho real
@@ -1237,65 +1442,102 @@ function drawCascadeDiagram() {
 function renderCascade() {
   const list = document.getElementById('cascadeList');
   list.innerHTML = '';
-  cascadeItems.forEach((item, idx) => {
-    const row = document.createElement('div');
-    row.className = 'cascade-item';
-    const sel = document.createElement('select');
-    spOptions.forEach(opt => {
-      const o = document.createElement('option');
-      o.value = opt.loss;
-      o.textContent = `${opt.name}  (${opt.loss} dB)`;
-      if (opt.loss === item.loss) o.selected = true;
-      sel.appendChild(o);
+
+  if (networkType === 'balanced') {
+    cascadeItems.forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = 'cascade-item';
+      const sel = document.createElement('select');
+      spOptions.forEach(opt => {
+        const o = document.createElement('option');
+        o.value = opt.loss;
+        o.textContent = `${opt.name}  (${opt.loss} dB)`;
+        if (opt.loss === item.loss) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.onchange = () => { cascadeItems[idx].loss = parseFloat(sel.value); renderCascade(); recalc(); };
+      const lossTag = document.createElement('span');
+      lossTag.className = 'cascade-item-loss';
+      lossTag.textContent = (item.loss ?? 0).toFixed(1) + ' dB';
+      const rm = document.createElement('button');
+      rm.className = 'cascade-remove'; rm.innerHTML = '&times;';
+      rm.onclick = () => { cascadeItems.splice(idx, 1); renderCascade(); recalc(); };
+      row.appendChild(sel); row.appendChild(lossTag); row.appendChild(rm);
+      list.appendChild(row);
     });
-    sel.onchange = () => { cascadeItems[idx].loss = parseFloat(sel.value); renderCascade(); recalc(); };
-    const lossTag = document.createElement('span');
-    lossTag.className = 'cascade-item-loss';
-    lossTag.textContent = item.loss.toFixed(1) + ' dB';
-    const rm = document.createElement('button');
-    rm.className = 'cascade-remove';
-    rm.innerHTML = '&times;';
-    rm.onclick = () => { cascadeItems.splice(idx, 1); renderCascade(); recalc(); };
-    row.appendChild(sel); row.appendChild(lossTag); row.appendChild(rm);
-    list.appendChild(row);
-  });
+
+  } else {
+    cascadeItemsUnbal.forEach((item, idx) => {
+      const opt = unbalOptions[item.optIdx];
+      const div = document.createElement('div');
+      div.className = 'cascade-item-unbal';
+      const hdr = document.createElement('div');
+      hdr.className = 'unbal-header';
+      const sel = document.createElement('select');
+      unbalOptions.forEach((o, oi) => {
+        const op = document.createElement('option');
+        op.value = oi; op.textContent = o.name;
+        if (oi === item.optIdx) op.selected = true;
+        sel.appendChild(op);
+      });
+      sel.onchange = () => { cascadeItemsUnbal[idx].optIdx = parseInt(sel.value); renderCascade(); recalc(); };
+      const rm = document.createElement('button');
+      rm.className = 'cascade-remove'; rm.innerHTML = '&times;';
+      rm.onclick = () => { cascadeItemsUnbal.splice(idx, 1); renderCascade(); recalc(); };
+      hdr.appendChild(sel); hdr.appendChild(rm);
+      const branches = document.createElement('div');
+      branches.className = 'unbal-branches';
+      ['main', 'tap'].forEach(br => {
+        const isMain = br === 'main';
+        const loss = isMain ? opt.loss1 : opt.loss2;
+        const pct  = isMain ? opt.pct1  : opt.pct2;
+        const bc = document.createElement('div');
+        bc.className = 'unbal-branch' + (item.branch === br ? ' selected' : '');
+        const lbl = document.createElement('div');
+        lbl.className = 'unbal-branch-label';
+        const btnSel = document.createElement('button');
+        btnSel.className = 'branch-select-btn' + (item.branch === br ? ' active' : '');
+        btnSel.textContent = item.branch === br ? '✓ activa' : 'usar';
+        btnSel.onclick = () => { cascadeItemsUnbal[idx].branch = br; renderCascade(); recalc(); };
+        const lblText = document.createElement('span');
+        lblText.textContent = isMain ? 'PRINCIPAL' : 'TAP';
+        lbl.appendChild(lblText); lbl.appendChild(btnSel);
+        const lossEl = document.createElement('div');
+        lossEl.className = 'unbal-branch-loss';
+        lossEl.textContent = '-' + loss.toFixed(1) + ' dB';
+        const pctEl = document.createElement('div');
+        pctEl.className = 'unbal-branch-pct';
+        const portsInfo = isMain
+          ? `${pct}% → siguiente nodo`
+          : `${pct}% → NAP 8 puertos`;
+        pctEl.textContent = portsInfo;
+        bc.appendChild(lbl); bc.appendChild(lossEl); bc.appendChild(pctEl);
+        branches.appendChild(bc);
+      });
+      div.appendChild(hdr); div.appendChild(branches);
+      list.appendChild(div);
+    });
+  }
+
   document.getElementById('cascadeTotalVal').textContent = getCascadeLoss().toFixed(1) + ' dB';
   drawCascadeDiagram();
 }
 
 function addCascadeItem() {
-  cascadeItems.push({ loss: 7.2 });
+  if (networkType === 'balanced') {
+    cascadeItems.push({ loss: 7.2 });
+  } else {
+    cascadeItemsUnbal.push({ optIdx: 0, branch: 'main' });
+  }
   renderCascade();
   recalc();
 }
 
 function buildGrid() {
-  const g = document.getElementById('splitterGrid');
-  splitters.forEach((s, i) => {
-    const d = document.createElement('div');
-    d.className = 'splitter-btn' + (s.special ? ' special' : '') + (i === active ? ' active' : '');
-    d.innerHTML = s.special
-      ? `<span class="sp-ratio">+ SUMAR</span><span class="sp-db">cascada</span>`
-      : `<span class="sp-ratio">${s.name}</span><span class="sp-db">${s.loss.toFixed(1)} dB</span>`;
-    d.onclick = () => {
-      active = i;
-      document.querySelectorAll('.splitter-btn').forEach((c,j) => {
-        c.className = 'splitter-btn' + (splitters[j].special ? ' special' : '') + (j === i ? ' active' : '');
-      });
-      const section = document.getElementById('cascadeDiagramSection');
-      const panel = document.getElementById('cascadePanel');
-      if (s.special) {
-        section.style.display = 'block';
-        panel.style.display = 'block';
-        renderCascade();
-      } else {
-        section.style.display = 'none';
-        panel.style.display = 'none';
-      }
-      recalc();
-    };
-    g.appendChild(d);
-  });
+  // splitterGrid eliminado — siempre modo cascada
+  // Mostrar diagrama y panel de cascada directamente
+  const section = document.getElementById('cascadeDiagramSection');
+  if (section) section.style.display = 'block';
 }
 
 function stateOf(margin) {
@@ -1337,44 +1579,51 @@ function setLandaResult(suffix, pin, rxSens, spLoss, connLoss, spliceLoss, km, a
 }
 
 function recalc() {
-  const pin1490 = parseFloat(document.getElementById('pin1490').value)      || 0;
-  const pin1550 = parseFloat(document.getElementById('pin1550').value)      || 0;
-  const rxSens1490 = parseFloat(document.getElementById('rxSens1490').value)|| -27;
-  const rxSens1550 = parseFloat(document.getElementById('rxSens1550').value)|| -7;
-  const connC   = parseFloat(document.getElementById('connCount').value) || 0;
-  const connL   = parseFloat(document.getElementById('connLoss').value)  || 0;
-  const splC    = parseFloat(document.getElementById('spliceCount').value)|| 0;
-  const splL    = parseFloat(document.getElementById('spliceLoss').value) || 0;
-  const km      = parseFloat(document.getElementById('fiberKm').value)   || 0;
-  const att     = parseFloat(document.getElementById('fiberAtten').value)|| 0;
+  const pin1490    = parseFloat(document.getElementById('pin1490').value)    || 0;
+  const pin1550    = parseFloat(document.getElementById('pin1550').value)    || 0;
+  const rxSens1490 = parseFloat(document.getElementById('rxSens1490').value) || -27;
+  const rxSens1550 = parseFloat(document.getElementById('rxSens1550').value) || -7;
+  const connC      = parseFloat(document.getElementById('connCount').value)  || 0;
+  const connL      = parseFloat(document.getElementById('connLoss').value)   || 0;
+  const splC       = parseFloat(document.getElementById('spliceCount').value)|| 0;
+  const splL       = parseFloat(document.getElementById('spliceLoss').value) || 0;
+  const km         = parseFloat(document.getElementById('fiberKm').value)    || 0;
 
-  const isCascade = splitters[active].special;
-  const spLoss    = isCascade ? getCascadeLoss() : splitters[active].loss;
-  if (isCascade) drawCascadeDiagram();
+  const isCascade  = true; // siempre modo cascada
+  const spLoss     = getCascadeLoss();
+
+  // Etiqueta del divisor activo — siempre cascada
+  let spLabel;
+  if (networkType === 'unbalanced') {
+    spLabel = `Cascada desbal. (${cascadeItemsUnbal.map(c => unbalOptions[c.optIdx]?.name || '?').join(' + ')})`;
+  } else {
+    spLabel = `Cascada (${cascadeItems.map(c => spOptions.find(o => o.loss === (c.loss||0))?.name || '?').join(' + ')})`;
+  }
 
   // Badge EDFA
   const edfaBadge = document.getElementById('edfaBadge');
   if (edfaBadge) edfaBadge.style.display = pin1550 >= 14 ? 'block' : 'none';
-  const spLabel   = isCascade
-    ? `Cascada (${cascadeItems.map(c => spOptions.find(o => o.loss === c.loss)?.name || '?').join(' + ')})`
-    : `Divisor (${splitters[active].name})`;
+
+  // Redibujar diagrama si cascada activa
+  if (isCascade) drawCascadeDiagram();
 
   const connLoss   = connC * connL;
   const spliceLoss = splC  * splL;
 
-  // Calcular ambas landas — fibra con atenuación típica por landa
+  // Calcular ambas landas
   const r1490 = setLandaResult('1490', pin1490, rxSens1490, spLoss, connLoss, spliceLoss, km, ATTEN.l1490);
   const r1550 = setLandaResult('1550', pin1550, rxSens1550, spLoss, connLoss, spliceLoss, km, ATTEN.l1550);
 
-  // Breakdown dual
+  // Breakdown
+  const rows = [
+    { name: spLabel,                           v1: spLoss,          v2: spLoss },
+    { name: `Conectores (${connC}×${connL}dB)`, v1: connLoss,        v2: connLoss },
+    { name: `Empalmes (${splC}×${splL}dB)`,     v1: spliceLoss,      v2: spliceLoss },
+    { name: `Fibra ${km}km`,                    v1: r1490.fiberLoss, v2: r1550.fiberLoss },
+    { name: 'TOTAL',                             v1: r1490.total,     v2: r1550.total, isTotal: true },
+  ];
   const maxT = Math.max(r1490.total, r1550.total) || 1;
-  document.getElementById('breakdown').innerHTML = [
-    { name: spLabel,                            v1: spLoss,       v2: spLoss },
-    { name: `Conectores (${connC} × ${connL})`, v1: connLoss,     v2: connLoss },
-    { name: `Empalmes (${splC} × ${splL})`,     v1: spliceLoss,   v2: spliceLoss },
-    { name: `Fibra ${km} km`,                   v1: r1490.fiberLoss, v2: r1550.fiberLoss },
-    { name: 'TOTAL',                             v1: r1490.total,  v2: r1550.total, isTotal: true }
-  ].map(r => `
+  document.getElementById('breakdown').innerHTML = rows.map(r => `
     <div class="breakdown-row">
       <div style="flex:1;">
         <div class="breakdown-name">${r.name}</div>
@@ -1387,16 +1636,14 @@ function recalc() {
     </div>
   `).join('');
 
-  // Chart: barras duales por divisor
+  // Chart comparativo por divisor balanceado
   const labels = splitters.filter(s => s.loss > 0 && !s.special).map(s => s.name);
-  const p1490  = splitters.filter(s => s.loss > 0 && !s.special).map(s => {
-    const t = s.loss + connLoss + spliceLoss + km * ATTEN.l1490;
-    return parseFloat((pin1490 - t).toFixed(2));
-  });
-  const p1550  = splitters.filter(s => s.loss > 0 && !s.special).map(s => {
-    const t = s.loss + connLoss + spliceLoss + km * ATTEN.l1550;
-    return parseFloat((pin1550 - t).toFixed(2));
-  });
+  const p1490c = splitters.filter(s => s.loss > 0 && !s.special).map(s =>
+    parseFloat((pin1490 - (s.loss + connLoss + spliceLoss + km * ATTEN.l1490)).toFixed(2))
+  );
+  const p1550c = splitters.filter(s => s.loss > 0 && !s.special).map(s =>
+    parseFloat((pin1550 - (s.loss + connLoss + spliceLoss + km * ATTEN.l1550)).toFixed(2))
+  );
 
   if (!chart) {
     chart = new Chart(document.getElementById('lossChart'), {
@@ -1404,25 +1651,16 @@ function recalc() {
       data: {
         labels,
         datasets: [
-          { label: '1490 nm', data: p1490, backgroundColor: '#ff9f4399', borderColor: '#ff9f43', borderWidth: 1, borderRadius: 4 },
-          { label: '1550 nm', data: p1550, backgroundColor: '#a29bfe99', borderColor: '#a29bfe', borderWidth: 1, borderRadius: 4 },
-          {
-            label: 'Umbral 1490', data: new Array(labels.length).fill(rxSens1490),
-            type: 'line', borderColor: '#ff9f43', borderDash: [4,3], borderWidth: 1.5, pointRadius: 0, fill: false
-          },
-          {
-            label: 'Umbral 1550', data: new Array(labels.length).fill(rxSens1550),
-            type: 'line', borderColor: '#a29bfe', borderDash: [4,3], borderWidth: 1.5, pointRadius: 0, fill: false
-          }
+          { label: '1490 nm',    data: p1490c, backgroundColor: '#ff9f4399', borderColor: '#ff9f43', borderWidth: 1, borderRadius: 4 },
+          { label: '1550 nm',    data: p1550c, backgroundColor: '#a29bfe99', borderColor: '#a29bfe', borderWidth: 1, borderRadius: 4 },
+          { label: 'Umbral 1490', data: new Array(labels.length).fill(rxSens1490), type: 'line', borderColor: '#ff9f43', borderDash: [4,3], borderWidth: 1.5, pointRadius: 0, fill: false },
+          { label: 'Umbral 1550', data: new Array(labels.length).fill(rxSens1550), type: 'line', borderColor: '#a29bfe', borderDash: [4,3], borderWidth: 1.5, pointRadius: 0, fill: false },
         ]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
         plugins: {
-          legend: {
-            display: true,
-            labels: { color: '#8a99bb', font: { family: 'Space Mono', size: 10 }, boxWidth: 10, padding: 14 }
-          },
+          legend: { display: true, labels: { color: '#8a99bb', font: { family: 'Space Mono', size: 10 }, boxWidth: 10, padding: 14 } },
           tooltip: {
             backgroundColor: '#1a2030', borderColor: '#2a3350', borderWidth: 1,
             titleColor: '#8a99bb', bodyColor: '#e8edf8',
@@ -1438,15 +1676,15 @@ function recalc() {
       }
     });
   } else {
-    chart.data.datasets[0].data = p1490;
-    chart.data.datasets[1].data = p1550;
+    chart.data.datasets[0].data = p1490c;
+    chart.data.datasets[1].data = p1550c;
     chart.data.datasets[2].data = new Array(labels.length).fill(rxSens1490);
     chart.data.datasets[3].data = new Array(labels.length).fill(rxSens1550);
     chart.update('active');
   }
 }
-
 buildGrid();
+renderCascade();
 recalc();
 </script>
 </body>
