@@ -43,6 +43,7 @@
     font-family: var(--sans);
     min-height: 100vh;
     overflow-x: hidden;
+    overflow-y: scroll; /* necesario para sticky funcione correctamente */
   }
 
   body::before {
@@ -120,7 +121,17 @@
     align-items: start;
   }
 
-  @media (max-width: 820px) { .main-grid { grid-template-columns: 1fr; } }
+  /* Columna derecha: sticky con scroll interno */
+  .right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 820px) {
+    .main-grid { grid-template-columns: 1fr; }
+    .right-col { overflow-y: visible; height: auto; }
+  }
 
   /* PANELS */
   .panel {
@@ -870,7 +881,9 @@
 
     </div>
 
-    <!-- RIGHT: Resultados del Enlace -->
+    <!-- RIGHT: columna con scroll -->
+    <div class="right-col">
+
     <div class="panel">
       <div class="panel-header">
         <div class="panel-dot"></div>
@@ -958,57 +971,59 @@
 
       </div>
     </div>
-  </div>
 
-  <!-- DIAGRAMA DE CASCADA — full width, siempre visible cuando SUMAR activo -->
-  <div id="cascadeDiagramSection" style="display:none; margin-top:1.5rem;">
-    <div class="cascade-diagram-full">
-      <div class="cdg-header">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:7px;height:7px;border-radius:50%;background:#7f77dd;box-shadow:0 0 8px #7f77dd;flex-shrink:0;"></div>
-          <span class="cdg-title">Diagrama de camino óptico</span>
+    <!-- DIAGRAMA DE CASCADA — dentro de la columna derecha -->
+    <div id="cascadeDiagramSection" style="display:none;">
+      <div class="cascade-diagram-full">
+        <div class="cdg-header">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:#7f77dd;box-shadow:0 0 8px #7f77dd;flex-shrink:0;"></div>
+            <span class="cdg-title">Diagrama de camino óptico</span>
+          </div>
+          <div class="cdg-badges">
+            <span class="cdg-badge l1">&#9632; 1490 nm</span>
+            <span class="cdg-badge l2">&#9632; 1550 nm</span>
+            <span class="cdg-badge edfa" id="cdgEdfaBadge" style="display:none;">&#9889; EDFA</span>
+            <span class="cdg-badge nap" id="cdgNapBadge" style="display:none;">&#9670; Desbalanceado</span>
+          </div>
         </div>
-        <div class="cdg-badges">
-          <span class="cdg-badge l1">&#9632; 1490 nm</span>
-          <span class="cdg-badge l2">&#9632; 1550 nm</span>
-          <span class="cdg-badge edfa" id="cdgEdfaBadge" style="display:none;">&#9889; EDFA</span>
-          <span class="cdg-badge nap" id="cdgNapBadge" style="display:none;">&#9670; Desbalanceado</span>
+        <div class="cdg-scroll">
+          <svg id="cascadeSvg" class="cascade-svg-main"></svg>
+        </div>
+        <div class="cdg-hint" id="cdgHint">&#8592; deslizá para ver el diagrama completo &#8594;</div>
+      </div>
+    </div>
+
+    <!-- DESGLOSE DE PÉRDIDAS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-dot"></div>
+        <span class="panel-title">
+          Desglose de pérdidas
+          <span style="margin-left:12px;color:var(--l1-color);font-size:0.65rem;">&#9632; 1490 nm</span>
+          <span style="margin-left:8px;color:var(--l2-color);font-size:0.65rem;">&#9632; 1550 nm</span>
+        </span>
+      </div>
+      <div class="panel-body">
+        <div class="breakdown" id="breakdown"></div>
+      </div>
+    </div>
+
+    <!-- COMPARACIÓN POR DIVISOR -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-dot"></div>
+        <span class="panel-title">Comparación por divisor</span>
+      </div>
+      <div class="panel-body">
+        <div style="position:relative;height:300px;">
+          <canvas id="lossChart"></canvas>
         </div>
       </div>
-      <div class="cdg-scroll">
-        <svg id="cascadeSvg" class="cascade-svg-main"></svg>
-      </div>
-      <div class="cdg-hint" id="cdgHint">&#8592; deslizá para ver el diagrama completo &#8594;</div>
     </div>
-  </div>
 
-  <!-- DESGLOSE DE PÉRDIDAS — full width -->
-  <div class="panel" style="margin-top:1.25rem;">
-    <div class="panel-header">
-      <div class="panel-dot"></div>
-      <span class="panel-title">
-        Desglose de pérdidas
-        <span style="margin-left:12px;color:var(--l1-color);font-size:0.65rem;">&#9632; 1490 nm</span>
-        <span style="margin-left:8px;color:var(--l2-color);font-size:0.65rem;">&#9632; 1550 nm</span>
-      </span>
-    </div>
-    <div class="panel-body">
-      <div class="breakdown" id="breakdown"></div>
-    </div>
-  </div>
-
-  <!-- COMPARACIÓN POR DIVISOR — full width -->
-  <div class="panel" style="margin-top:1.25rem;">
-    <div class="panel-header">
-      <div class="panel-dot"></div>
-      <span class="panel-title">Comparación por divisor</span>
-    </div>
-    <div class="panel-body">
-      <div style="position:relative;height:280px;">
-        <canvas id="lossChart"></canvas>
-      </div>
-    </div>
-  </div>
+    </div><!-- end right-col -->
+  </div><!-- end main-grid -->
 
 </div><!-- end app -->
 
@@ -1098,8 +1113,8 @@ function drawCascadeDiagram() {
   // Layout
   const symW = 44;
   const lineLen = 52;
-  const rowH = isUnbal ? 170 : 130;  // más altura en desbalanceado para caja NAP arriba
-  const cy = isUnbal ? 90 : 56;      // centro más bajo en desbalanceado para dar espacio al NAP
+  const rowH = isUnbal ? 190 : 130;  // más altura en desbalanceado para caja NAP arriba
+  const cy = isUnbal ? 105 : 56;     // centro más bajo en desbalanceado para dar espacio al NAP
   const svgW = (symW + lineLen) * (n + 2) + 20;
   const svgH = rowH;
 
@@ -1171,6 +1186,42 @@ function drawCascadeDiagram() {
     });
     // Etiqueta dentro
     s += `<text x="${cx}" y="${yc + 3}" text-anchor="middle" font-family="Space Mono" font-size="5.5" fill="${color}" font-weight="700">${name}</text>`;
+    return s;
+  }
+
+  // SPLITTER DESBALANCEADO: círculo pie — sector sombreado = rama directa (mayor %), sin sombrear = tap
+  function unbalSymbol(cx, yc, pct1, pct2, name) {
+    const r = 16;
+    const colorMain = '#ff9f43'; // rama directa (inserción, mayor potencia)
+    const colorTap  = '#1c1508'; // rama tap (derivación, menor potencia)
+    // Ángulo del sector: pct1% del círculo = sector sombreado (rama directa)
+    const angle = (pct1 / 100) * 2 * Math.PI;
+    // Empezamos desde arriba (-PI/2) y vamos en sentido horario
+    const startAngle = -Math.PI / 2;
+    const endAngle   = startAngle + angle;
+    const x1s = cx + r * Math.cos(startAngle);
+    const y1s = yc + r * Math.sin(startAngle);
+    const x1e = cx + r * Math.cos(endAngle);
+    const y1e = yc + r * Math.sin(endAngle);
+    const largeArc = pct1 > 50 ? 1 : 0;
+    let s = '';
+    // Fondo del círculo (color tap)
+    s += `<circle cx="${cx}" cy="${yc}" r="${r}" fill="${colorTap}" stroke="#ff9f43" stroke-width="1.8" filter="url(#gv)"/>`;
+    // Sector sombreado = rama directa (pct1%)
+    s += `<path d="M${cx},${yc} L${x1s.toFixed(1)},${y1s.toFixed(1)} A${r},${r} 0 ${largeArc},1 ${x1e.toFixed(1)},${y1e.toFixed(1)} Z"
+      fill="${colorMain}" opacity="0.85"/>`;
+    // Borde del círculo
+    s += `<circle cx="${cx}" cy="${yc}" r="${r}" fill="none" stroke="#ff9f43" stroke-width="1.8"/>`;
+    // Línea de entrada (izquierda)
+    s += `<line x1="${cx - r - 6}" y1="${yc}" x2="${cx - r}" y2="${yc}" stroke="#ff9f43" stroke-width="1.5"/>`;
+    // Salida directa (derecha, horizontal)
+    s += `<line x1="${cx + r}" y1="${yc}" x2="${cx + r + 8}" y2="${yc}" stroke="${colorMain}" stroke-width="1.8" opacity="0.9"/>`;
+    s += `<polygon points="${cx+r+5},${yc-3} ${cx+r+11},${yc} ${cx+r+5},${yc+3}" fill="${colorMain}" opacity="0.9"/>`;
+    // Salida tap (arriba)
+    s += `<line x1="${cx}" y1="${yc - r}" x2="${cx}" y2="${yc - r - 10}" stroke="#ff9f43" stroke-width="1.5" opacity="0.7"/>`;
+    s += `<polygon points="${cx-3},${yc-r-7} ${cx+3},${yc-r-7} ${cx},${yc-r-13}" fill="#ff9f43" opacity="0.7"/>`;
+    // Etiqueta ratio dentro
+    s += `<text x="${cx}" y="${yc + 4}" text-anchor="middle" font-family="Space Mono" font-size="5" fill="#fff" font-weight="700" opacity="0.9">${pct1}/${pct2}</text>`;
     return s;
   }
 
@@ -1265,18 +1316,23 @@ function drawCascadeDiagram() {
 
       if (isUnbal) {
         const opt = unbalOptions[items[i].optIdx];
-        const tapY = cy - 42;
-        html += splitterSymbol(scx, cy, opt.name, '#ff9f43');
-        // Rama TAP → sube hacia NAP 8
-        html += `<line x1="${scx}" y1="${cy - 14}" x2="${scx}" y2="${tapY + 8}" stroke="#ff9f43" stroke-width="1.5" opacity="0.85"/>`;
-        html += `<polygon points="${scx-3},${tapY+5} ${scx+3},${tapY+5} ${scx},${tapY}" fill="#ff9f43" opacity="0.85"/>`;
-        // Caja NAP 8
-        html += `<rect x="${scx - 18}" y="${tapY - 14}" width="36" height="14" rx="4" fill="#1c1508" stroke="#ff9f43" stroke-width="1.5" filter="url(#gv)"/>`;
-        html += `<text x="${scx}" y="${tapY - 4}" text-anchor="middle" font-family="Space Mono" font-size="5.5" fill="#ff9f43" font-weight="700">NAP 8</text>`;
-        // Pérdida tap
-        html += `<text x="${scx + 20}" y="${(cy + tapY)/2 + 2}" text-anchor="start" font-family="Space Mono" font-size="5" fill="#ff9f43" opacity="0.9">-${opt.loss2.toFixed(2)}dB</text>`;
-        // Distribución
-        html += `<text x="${scx}" y="${cy - 30}" text-anchor="middle" font-family="Space Mono" font-size="5.5" fill="#ff9f43">${opt.pct1}% nodo / ${opt.pct2}% NAP</text>`;
+        const napY = cy - 52;  // Y de la caja NAP (encima del círculo)
+
+        // Símbolo circular tipo pie
+        html += unbalSymbol(scx, cy, opt.pct1, opt.pct2, opt.name);
+
+        // Etiqueta encima del símbolo
+        html += `<text x="${scx}" y="${cy - 24}" text-anchor="middle" font-family="Space Mono" font-size="5.5" fill="#ff9f43">SP ${i+1} · ${opt.name}</text>`;
+
+        // Caja NAP 8 — encima de la salida tap (que sale por arriba del círculo)
+        html += `<rect x="${scx - 20}" y="${napY - 14}" width="40" height="14" rx="4" fill="#1c1508" stroke="#ff9f43" stroke-width="1.5" filter="url(#gv)"/>`;
+        html += `<text x="${scx}" y="${napY - 4}" text-anchor="middle" font-family="Space Mono" font-size="5.5" fill="#ff9f43" font-weight="700">NAP 8</text>`;
+
+        // Etiquetas de pérdida: directa (derecha) y tap (izquierda del NAP)
+        html += `<text x="${scx + 30}" y="${cy + 4}" text-anchor="start" font-family="Space Mono" font-size="5" fill="#ff9f43" opacity="0.85">ins. -${opt.loss1.toFixed(2)}dB</text>`;
+        html += `<text x="${scx + 22}" y="${(cy + napY)/2}" text-anchor="start" font-family="Space Mono" font-size="5" fill="#ff9f43" opacity="0.85">tap -${opt.loss2.toFixed(2)}dB</text>`;
+
+        // Potencias debajo
         html += powerLabel(scx, cy, p1490, p1550);
       } else {
         html += splitterSymbol(scx, cy, name, '#7f77dd');
@@ -1323,7 +1379,6 @@ function drawCascadeDiagram() {
     html += txSymbol(txCx, mainY, '#00e5a0');
     html += `<text x="${txCx}" y="${mainY - 30}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#00e5a0">OLT·TX</text>`;
     html += `<text x="${txCx}" y="${mainY + 22}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#ff9f43">1490 nm</text>`;
-    html += `<text x="${txCx}" y="${mainY + 32}" text-anchor="middle" font-family="Space Mono" font-size="6" fill="#a29bfe">1550 nm</text>`;
 
     // ── Fibra OLT → base EDFA ──
     const oltOutX = curX + symW + 11;
@@ -1340,10 +1395,7 @@ function drawCascadeDiagram() {
     // Er³⁺ dentro
     html += `<text x="${edfaCx - 4}" y="${mainY + 3}" text-anchor="middle" font-family="Space Mono" font-size="7" fill="#f9ca24" font-weight="700" opacity="0.9">Er</text>`;
     html += `<text x="${edfaCx + 5}" y="${mainY - 2}" text-anchor="middle" font-family="Space Mono" font-size="5" fill="#f9ca24" opacity="0.8">3+</text>`;
-    // Pump 980 nm (flecha hacia arriba desde la cima)
-    html += `<line x1="${edfaCx}" y1="${mainY - eh/2 - 6}" x2="${edfaCx}" y2="${mainY - eh/2 - 18}" stroke="#f9ca24" stroke-width="1.5" opacity="0.8"/>`;
-    html += `<polygon points="${edfaCx-3},${mainY-eh/2-6} ${edfaCx+3},${mainY-eh/2-6} ${edfaCx},${mainY-eh/2-1}" fill="#f9ca24" opacity="0.8"/>`;
-    html += `<text x="${edfaCx + 6}" y="${mainY - eh/2 - 10}" font-family="Space Mono" font-size="5" fill="#f9ca24" opacity="0.9">pump 980nm</text>`;
+
     // Label EDFA
     html += `<text x="${edfaCx}" y="${mainY + eh/2 + 16}" text-anchor="middle" font-family="Space Mono" font-size="6.5" fill="#f9ca24" font-weight="700">EDFA</text>`;
 
